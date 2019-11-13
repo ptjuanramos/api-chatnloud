@@ -22,12 +22,27 @@ package com.chatnloud.api.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-public class ChatRoomServiceExceptions {
+public final class ChatGroupServiceExceptions {
+
+    private ChatGroupServiceExceptions() {}
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public static class ChatRoomNotExistException extends RuntimeException {
-
         public ChatRoomNotExistException(String message) {
+            super(message);
+        }
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public static class TooManyChatGroupsException extends RuntimeException {
+        public TooManyChatGroupsException(String message) {
+            super(message);
+        }
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public static class UserAlreadyInGroupException extends RuntimeException {
+        public UserAlreadyInGroupException(String message) {
             super(message);
         }
     }

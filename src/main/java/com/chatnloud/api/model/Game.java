@@ -21,9 +21,19 @@ package com.chatnloud.api.model;
 
 import lombok.Data;
 
-@Data
-public class GroupInfo {
+import javax.persistence.*;
+import java.util.UUID;
 
-    //private String canonicalName;
-    private String accessCode;
+@Data
+@Entity
+@Table
+public class Game {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
+
+    @Column(name = "game_category")
+    private GameCategory gameCategory;
+
 }

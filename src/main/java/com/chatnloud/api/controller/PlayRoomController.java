@@ -19,46 +19,20 @@
 
 package com.chatnloud.api.controller;
 
-import com.chatnloud.api.exception.UserServiceExceptions;
-import com.chatnloud.api.model.ChatGroup;
+import com.chatnloud.api.model.Game;
 import com.chatnloud.api.model.User;
-import com.chatnloud.api.service.GroupService;
-import com.chatnloud.api.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
-
-@SuppressWarnings("unused")
 @RestController
-@RequestMapping("user")
-public class UserController {
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private GroupService groupService;
-
-    @PostMapping
-    public User signUp(@RequestBody User newUser) {
-        return userService.createNewUser(newUser);
-    }
+@RequestMapping("playRoom")
+public class PlayRoomController {
 
     @GetMapping
-    public User getUserInformation() {
-        return userService.getUserByUsername("username"); //TODO - get username via Authentication
-    }
-
-    @DeleteMapping
-    public void removeUser(User userToRemove) {
-        userService.deleteUser(userToRemove);
-    }
-
-    @PutMapping
-    public User updateUser(User newUserInfo) {
+    public Game obtainNewNewGame() {
+        User user = null; //TODO- obtain user from Authentication
         return null;
     }
 }

@@ -19,17 +19,12 @@
 
 package com.chatnloud.api.controller;
 
-import com.chatnloud.api.exception.ChatRoomServiceExceptions;
-import com.chatnloud.api.generators.AccessCodeSequenceGenerator;
 import com.chatnloud.api.model.ChatGroup;
-import com.chatnloud.api.model.GroupInfo;
 import com.chatnloud.api.model.User;
 import com.chatnloud.api.service.GroupService;
 import com.chatnloud.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @SuppressWarnings("unused")
 @RestController
@@ -44,31 +39,22 @@ public class GroupController {
 
     @PostMapping
     public ChatGroup createGroup(@RequestBody ChatGroup newGroup) {
-        User creator = userService.getUserByUsername("username").get(); //TODO get username from Authentication and user from userservice object later
-
+        User creator = userService.getUserByUsername("username"); //TODO get username from Authentication and user from userservice object later
         newGroup.setCreator(creator);
-
-        String generatedAccessCode = AccessCodeSequenceGenerator.generate();
-        newGroup.setAccessCode(generatedAccessCode);
         return groupService.createNewGroup(newGroup);
     }
 
     @DeleteMapping
-    public void deleteGroup(@RequestBody GroupInfo info) {
+    public void deleteGroup(@RequestBody ChatGroup chatGroup) {
 
     }
 
     @PostMapping("join")
-    public ChatGroup joinGroup(@RequestBody GroupInfo info) {
-        Optional<ChatGroup> existentGroup = groupService.findChatGroupByAccessCode(info.getAccessCode());
-        if(!existentGroup.isPresent()) {
-            String notFoundMessage = "Group not found for %s access code";
-            new ChatRoomServiceExceptions.ChatRoomNotExistException(String.format(notFoundMessage, info.getAccessCode()));
-        }
+    public ChatGroup joinGroup(@RequestBody ChatGroup info) {
+        ChatGroup existentGroup = groupService.findChatGroupByAccessCode(info.getAccessCode());
+        User userToJoin = userService.getUserByUsername("username"); //TODO get username from Authentication and user from userservice object later
 
-        User userToJoin = userService.getUserByUsername("username").get(); //TODO get username from Authentication and user from userservice object later
-
-        ChatGroup chatGroupWithNewUser = groupService.addUserToGroup(userToJoin, existentGroup.get());
+        ChatGroup chatGroupWithNewUser = groupService.addUserToGroup(userToJoin, existentGroup);
         return chatGroupWithNewUser;
     }
 

@@ -19,52 +19,20 @@
 
 package com.chatnloud.api.model;
 
-import com.chatnloud.api.constants.ConstraintMessage;
-import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.util.List;
+import java.sql.Timestamp;
 import java.util.UUID;
 
-@Data
 @Entity
 @Table
-public class User {
+@Data
+public class ChatLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @JsonIgnore
-    @Column(name = "image_url_path")
-    private String imageUrlPath;
-
-    @Column(unique =  true)
-    @NotBlank(message = ConstraintMessage.CONSTRAINT_NOT_EMPTY_USERNAME)
-    private String username;
-
-    @NotBlank(message = ConstraintMessage.CONSTRAINT_NOT_EMPTY_NAME)
-    private String name;
-
-    @Column(name = "last_name")
-    @JsonProperty(value = "last_name")
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String lastName;
-
-    @JsonIgnore
-    private String password;
-
-    @JsonIgnore
-    private String salt; //TODO generate in controller or service level
-
-    @Column(unique =  true)
-    @NotBlank(message = ConstraintMessage.CONSTRAINT_NOT_EMPTY_EMAIL)
-    private String email;
-
-    @ManyToMany(mappedBy = "users")
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonIgnoreProperties("users")
-    private List<ChatGroup> chatGroups;
+    private Timestamp timestamp;
 }

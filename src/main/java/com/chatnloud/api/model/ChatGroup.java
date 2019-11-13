@@ -21,8 +21,6 @@ package com.chatnloud.api.model;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -55,18 +53,18 @@ public class ChatGroup {
 
     @NotBlank
     @Column(name = "access_code", unique = true)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String accessCode;
 
-    @ManyToOne
-    @JoinColumn(name = "creator_id")
-    @JsonIgnore
-    private User creator;
-
     @ManyToMany
-    @JoinColumn(name = "user_id")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIgnoreProperties("chatGroups")
     private List<User> users;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private User creator;
+
+    /*@Column(name = "play_room", unique = true)
+    private PlayRoom playRoom;*/
 }

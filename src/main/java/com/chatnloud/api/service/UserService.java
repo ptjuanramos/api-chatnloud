@@ -19,12 +19,14 @@
 
 package com.chatnloud.api.service;
 
+import com.chatnloud.api.exception.UserServiceExceptions;
 import com.chatnloud.api.model.ChatGroup;
 import com.chatnloud.api.model.User;
 import com.chatnloud.api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,6 +41,10 @@ public class UserService {
      * @return
      */
     public User createNewUser(User newUser) {
+        if(isUserExists(newUser)) {
+            throw new UserServiceExceptions.UserNotFoundException("Username already exists: " + newUser.getUsername());
+        }
+
         return userRepository.save(newUser);
     }
 
@@ -47,8 +53,9 @@ public class UserService {
      * @param username
      * @return
      */
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.getUserByUsername(username);
+    public User getUserByUsername(String username) {
+        Optional<User> possibleUserResult = userRepository.getUserByUsername(username);
+        return possibleUserResult.orElseThrow(() -> new UserServiceExceptions.UserNotFoundException("Couldn't found any user"));
     }
 
     /**
@@ -59,4 +66,22 @@ public class UserService {
     public boolean isUsernameRegistered(String username) {
         return userRepository.isUsernameRegistered(username);
     }
+
+    /**
+     *
+     * @param user
+     */
+    public void deleteUser(User user) {
+        if(!isUserExists(user)) {
+            throw new UserServiceExceptions.UserNotFoundException("User doesn't exists: " + user.getUsername());
+        }
+
+        userRepository.delete(user);
+    }
+
+    private boolean isUserExists(User user) {
+        String username = user.getUsername();
+        return isUsernameRegistered(username);
+    }
+
 }

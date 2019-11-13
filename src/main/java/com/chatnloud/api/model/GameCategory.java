@@ -19,14 +19,9 @@
 
 package com.chatnloud.api.model;
 
-import javax.persistence.*;
-import java.util.UUID;
-
-@Entity
-@Table
-public class ChatRoom {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+public enum GameCategory {
+    QUIZ,
+    DRINKING_GAMES,
+    TRUTH_OR_DARE,
+    RANDOM_CHALLENGE
 }

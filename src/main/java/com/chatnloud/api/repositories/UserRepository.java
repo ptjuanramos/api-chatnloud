@@ -19,10 +19,12 @@
 
 package com.chatnloud.api.repositories;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import com.chatnloud.api.constants.Queries;
+import com.chatnloud.api.model.ChatGroup;
 import com.chatnloud.api.model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
