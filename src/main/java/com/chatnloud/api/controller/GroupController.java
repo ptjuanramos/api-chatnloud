@@ -46,7 +46,8 @@ public class GroupController {
 
     @DeleteMapping
     public void deleteGroup(@RequestBody ChatGroup chatGroup) {
-
+        ChatGroup foundChatGroup = groupService.findChatGroupById(chatGroup.getId());
+        groupService.deleteGroup(foundChatGroup);
     }
 
     @PostMapping("join")
@@ -59,7 +60,7 @@ public class GroupController {
     }
 
     @DeleteMapping("leave")
-    public void leaveGroup() {
-
+    public void leaveGroup(@RequestBody ChatGroup info) {
+        User userToJoin = userService.getUserByUsername("username"); //TODO get username from Authentication and user from userservice object later
     }
 }

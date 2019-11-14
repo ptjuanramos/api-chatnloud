@@ -58,4 +58,6 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
         return ExceptionHandlerUtil.wrapExceptionInformation(errors, headers, status);
     }
+
+    
 }

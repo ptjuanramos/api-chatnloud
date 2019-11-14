@@ -24,7 +24,9 @@ import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,6 +61,7 @@ public class User {
     @JsonIgnore
     private String salt; //TODO generate in controller or service level
 
+    @Email
     @Column(unique =  true)
     @NotBlank(message = ConstraintMessage.CONSTRAINT_NOT_EMPTY_EMAIL)
     private String email;
@@ -66,5 +69,6 @@ public class User {
     @ManyToMany(mappedBy = "users")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonIgnoreProperties("users")
+    @Size(max = 5)
     private List<ChatGroup> chatGroups;
 }

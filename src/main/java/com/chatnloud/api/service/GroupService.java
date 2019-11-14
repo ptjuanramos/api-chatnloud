@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class GroupService {
@@ -59,13 +60,36 @@ public class GroupService {
 
     /**
      *
+     * @param group
+     */
+    public void deleteGroup(ChatGroup group) {
+        groupRepository.delete(group);
+    }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    public ChatGroup findChatGroupById(UUID id) {
+        Optional<ChatGroup> returnedChatGroup = groupRepository.findById(id);
+        if(!returnedChatGroup.isPresent()) {
+            String notFoundMessage = "Chat Group not found";
+            throw new ChatGroupServiceExceptions.ChatRoomNotExistException(notFoundMessage);
+        }
+
+        return returnedChatGroup.get();
+    }
+
+    /**
+     *
      * @param accessCode
      * @return
      */
     public ChatGroup findChatGroupByAccessCode(String accessCode) {
         Optional<ChatGroup> existentGroup = groupRepository.findByAccessCode(accessCode);
         if(!existentGroup.isPresent()) {
-            String notFoundMessage = "Group not found for %s access code";
+            String notFoundMessage = "Chat Group not found for %s access code";
             throw new ChatGroupServiceExceptions.ChatRoomNotExistException(String.format(notFoundMessage, accessCode));
         }
 
