@@ -69,14 +69,15 @@ public class UserService {
 
     /**
      *
-     * @param user
+     * @param username
      */
-    public void deleteUser(User user) {
-        if(!isUserExists(user)) {
-            throw new UserServiceExceptions.UserNotFoundException("User doesn't exists: " + user.getUsername());
+    public void deleteUser(String username) {
+        Optional<User> possibleUserToDelete = userRepository.getUserByUsername(username);
+        if(!possibleUserToDelete.isPresent()) {
+            throw new UserServiceExceptions.UserNotFoundException("User doesn't exists: " + username);
         }
 
-        userRepository.delete(user);
+        userRepository.delete(possibleUserToDelete.get());
     }
 
     private boolean isUserExists(User user) {

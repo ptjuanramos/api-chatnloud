@@ -17,19 +17,22 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.chatnloud.api.exception;
+package com.chatnloud.api.exception.handler;
 
-public class UserServiceExceptions {
+import com.chatnloud.api.exception.UserServiceExceptions;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-    public static class UserNotFoundException extends RuntimeException {
-        public UserNotFoundException(String message) {
-            super(message);
-        }
+@SuppressWarnings("unused")
+@ControllerAdvice
+public class UserServiceExceptionsHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(UserServiceExceptions.UserNotFoundException.class)
+    public ResponseEntity<Object> handleUserNotFoundException(UserServiceExceptions.UserNotFoundException ex) {
+        return ExceptionHandlerUtil.wrapExceptionInformation(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    public static class UserNotCreatedException extends RuntimeException {
-        public UserNotCreatedException(String message) {
-            super(message);
-        }
-    }
 }

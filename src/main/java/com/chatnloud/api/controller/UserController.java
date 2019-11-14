@@ -54,7 +54,7 @@ public class UserController {
 
     @DeleteMapping
     public void removeUser(User userToRemove) {
-        userService.deleteUser(userToRemove);
+        userService.deleteUser("username"); //TODO - get username via Authentication
     }
 
     @PutMapping
