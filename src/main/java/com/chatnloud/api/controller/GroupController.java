@@ -53,7 +53,7 @@ public class GroupController {
     @PostMapping("join")
     public ChatGroup joinGroup(@RequestBody ChatGroup info) {
         ChatGroup existentGroup = groupService.findChatGroupByAccessCode(info.getAccessCode());
-        User userToJoin = userService.getUserByUsername("username"); //TODO get username from Authentication and user from userservice object later
+        User userToJoin = userService.getUserByUsername("username1"); //TODO get username from Authentication and user from userservice object later
 
         ChatGroup chatGroupWithNewUser = groupService.addUserToGroup(userToJoin, existentGroup);
         return chatGroupWithNewUser;

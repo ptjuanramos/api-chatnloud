@@ -17,32 +17,28 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.chatnloud.api.controller.handlers;
+package com.chatnloud.api.exception.handler;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
-public class ExceptionHandlerUtil {
+@SuppressWarnings("unused")
+@ControllerAdvice
+public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    /**
-     *
-     * @param errors
-     * @param headers
-     * @param status
-     * @return
-     */
-    public static ResponseEntity<Object> wrapExceptionInformation(List<String> errors, HttpHeaders headers, HttpStatus status) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-
-        return new ResponseEntity<>(body, headers, status);
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        List<FieldError> errors = ex.getBindingResult().getFieldErrors();
+        return ExceptionHandlerUtil.wrapExceptionInformation(ex.getMessage(), status, errors);
     }
+
+    
 }

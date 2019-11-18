@@ -22,7 +22,7 @@ package com.chatnloud.api.constants;
 public class Queries {
 
     public static final String QUERY_USER_GET_BY_USERNAME = "SELECT u From User u WHERE u.username = :username";
-    public static final String QUERY_USER_IS_USERNAME_REGISTERED = "SELECT COUNT(u) > 0 From User u WHERE u.username = :username";
+    public static final String QUERY_USER_IS_USER_REGISTERED = "SELECT COUNT(u) > 0 From User u WHERE u.username = :username OR u.email = :email";
 
     public static final String QUERY_CHATGROUP_GET_BY_ACCESSCODE = "SELECT c FROM chatgroup c WHERE c.accessCode = :accessCode";
 }

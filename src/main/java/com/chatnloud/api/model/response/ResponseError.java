@@ -20,6 +20,7 @@
 package com.chatnloud.api.model.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
@@ -33,10 +34,11 @@ public class ResponseError {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime timestamp;
     private String message;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<SubError> subErrors;
 
     @Data
-    public class SubError {
+    public static class SubError {
 
         private String field;
         private String error;

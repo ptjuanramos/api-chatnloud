@@ -26,6 +26,7 @@ import com.chatnloud.api.model.User;
 import com.chatnloud.api.repositories.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -44,6 +45,7 @@ public class GroupService {
      * @param group
      * @return
      */
+    @Transactional
     public ChatGroup createNewGroup(ChatGroup group) {
         User creator = group.getCreator();
         if(creator.getChatGroups().size() == GROUPS_MAX_NUMBER) {
@@ -62,6 +64,7 @@ public class GroupService {
      *
      * @param group
      */
+    @Transactional
     public void deleteGroup(ChatGroup group) {
         groupRepository.delete(group);
     }
@@ -102,6 +105,7 @@ public class GroupService {
      * @param group
      * @return
      */
+    @Transactional
     public ChatGroup addUserToGroup(User user, ChatGroup group) {
         if(group.getUsers() == null) {
             group.setUsers(new ArrayList<>());
@@ -115,4 +119,11 @@ public class GroupService {
         group.getUsers().add(user);
         return group;
     }
+
+    @Transactional
+    public ChatGroup removeUserFromGroup(User user, ChatGroup chatGroup) {
+        chatGroup.getUsers().remove(user);
+        return groupRepository.save(chatGroup);
+    }
+
 }
