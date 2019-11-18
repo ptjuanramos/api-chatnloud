@@ -19,12 +19,10 @@
 
 package com.chatnloud.api.repositories;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import com.chatnloud.api.constants.Queries;
-import com.chatnloud.api.model.ChatGroup;
 import com.chatnloud.api.model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -35,6 +33,6 @@ public interface UserRepository extends CrudRepository<User, UUID> {
     @Query(value = Queries.QUERY_USER_GET_BY_USERNAME)
     Optional<User> getUserByUsername(@Param("username") String username);
 
-    @Query(value = Queries.QUERY_USER_IS_USERNAME_REGISTERED)
-    boolean isUsernameRegistered(@Param("username") String username);
+    @Query(value = Queries.QUERY_USER_IS_USER_REGISTERED)
+    boolean isUsernameRegistered(@Param("username") String username, @Param("email") String email);
 }

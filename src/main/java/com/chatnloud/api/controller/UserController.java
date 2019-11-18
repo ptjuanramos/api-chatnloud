@@ -47,6 +47,9 @@ public class UserController {
         return userService.createNewUser(newUser);
     }
 
+    /*@PostMapping
+    public*/
+
     @GetMapping
     public User getUserInformation() {
         return userService.getUserByUsername("username"); //TODO - get username via Authentication
@@ -54,7 +57,7 @@ public class UserController {
 
     @DeleteMapping
     public void removeUser(User userToRemove) {
-        userService.deleteUser("username"); //TODO - get username via Authentication
+        userService.deleteUser("username1"); //TODO - get username via Authentication
     }
 
     @PutMapping

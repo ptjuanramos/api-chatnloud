@@ -20,13 +20,12 @@
 package com.chatnloud.api.service;
 
 import com.chatnloud.api.exception.UserServiceExceptions;
-import com.chatnloud.api.model.ChatGroup;
 import com.chatnloud.api.model.User;
 import com.chatnloud.api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,14 +34,23 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    private GroupService groupService;
+
+    @Autowired
+    public void setGroupService(GroupService groupService) {
+        this.groupService = groupService;
+    }
+
     /**
      *
      * @param newUser
      * @return
      */
+    @Transactional
     public User createNewUser(User newUser) {
         if(isUserExists(newUser)) {
-            throw new UserServiceExceptions.UserNotFoundException("Username already exists: " + newUser.getUsername());
+            String errorMessage = "Username or email already exists: %s or %s";
+            throw new UserServiceExceptions.UserNotFoundException(String.format(errorMessage, newUser.getUsername(), newUser.getEmail()));
         }
 
         return userRepository.save(newUser);
@@ -63,26 +71,38 @@ public class UserService {
      * @param username
      * @return
      */
-    public boolean isUsernameRegistered(String username) {
-        return userRepository.isUsernameRegistered(username);
+    public boolean isUsernameOrEmailRegistered(String username, String email) {
+        return userRepository.isUsernameRegistered(username, email);
     }
 
     /**
      *
      * @param username
      */
+    @Transactional
     public void deleteUser(String username) {
         Optional<User> possibleUserToDelete = userRepository.getUserByUsername(username);
         if(!possibleUserToDelete.isPresent()) {
             throw new UserServiceExceptions.UserNotFoundException("User doesn't exists: " + username);
         }
 
+        User userToDelete = possibleUserToDelete.get();
+
+        //Where he is the chat owner
+        userToDelete.getChatGroups()
+                .stream()
+                .filter(cg -> cg.getCreator().equals(userToDelete))
+                .forEach(cg -> {
+                    groupService.deleteGroup(cg);
+                });
+
         userRepository.delete(possibleUserToDelete.get());
     }
 
     private boolean isUserExists(User user) {
         String username = user.getUsername();
-        return isUsernameRegistered(username);
+        String email = user.getEmail();
+        return isUsernameOrEmailRegistered(username, email);
     }
 
 }
